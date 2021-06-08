@@ -30,3 +30,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
 });
+
+require('datatables.net-bs4');
+
+require('datatables.net-responsive-bs4');
+
+require('../../vendor/kejojedi/crudify/resources/js/crudify');
