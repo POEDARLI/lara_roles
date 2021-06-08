@@ -39,7 +39,7 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        Article::create($request->all());
+        Article::create($request->all() + ['user_id'=> auth()->id()]);
 
         return redirect()->route('articles.index');
     }
