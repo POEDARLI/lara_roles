@@ -21,6 +21,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+//for Login Users
 Route::middleware('auth')->group(function(){
     Route::resource('articles', 'ArticleController');
+
+    // Administrator
+    Route::middleware('is_admin')->group(function(){
+        Route::resource('categories', 'CategoryController')->middleware('is_admin');
+    });
+    
 });

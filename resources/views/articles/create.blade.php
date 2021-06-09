@@ -29,6 +29,12 @@
                             @endforeach
                         </select>
                         <br />
+
+                        @can('publish-articles')
+                        <input type="checkbox" name="published" value="1" /> Published
+                        @endcan
+                        <br /><br />
+
                         <input type="submit" value=" Save Article " class="btn btn-primary" />
                     </form>
                 </div>

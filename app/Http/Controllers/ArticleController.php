@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Article;
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ArticleController extends Controller
 {
@@ -39,7 +40,11 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        Article::create($request->all() + ['user_id'=> auth()->id()]);
+        Article::create($request->all() + 
+        [
+            'user_id'=> auth()->id(),
+            'published_at' => (Gate::allows('publish-articles') && $request->input('published')) ? now() : null
+        ]);
 
         return redirect()->route('articles.index');
     }
@@ -63,6 +68,8 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
+        $this->authorize('update', $article);
+
         $categories = Category::all();
 
         return view('articles.edit', compact('article', 'categories'));
@@ -77,7 +84,14 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        $article->update($request->all());
+        $this->authorize('update', $article);
+
+        $published_params = [];
+        if(Gate::allows('publish-articles') && !$article->published_at && $request->input('published')){
+            $published_params = [ "published_at" => now()];
+        }
+        
+        $article->update($request->all() + $published_params);
 
         return redirect()->route('articles.index');
     }
@@ -90,6 +104,8 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
+        $this->authorize('update', $article);
+        
         $article->delete();
 
         return redirect()->route('articles.index');

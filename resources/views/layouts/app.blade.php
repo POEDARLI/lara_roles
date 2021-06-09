@@ -49,6 +49,12 @@
                                 </li>
                             @endif
                         @else
+                            @can('manage-categories')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('categories.index') }}">{{ __('Categories') }}</a>
+                                </li>
+                            @endcan
+                            
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('articles.index') }}">{{ __('Articles') }}</a>
                             </li>
